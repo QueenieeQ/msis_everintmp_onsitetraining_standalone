@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Onsite Training Studio</title>
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+<header>
+  <h1>Onsite Training Studio</h1>
+  <span id="hint">annotate left / right / closer shots, zoom, then train</span>
+</header>
+
+<section id="controls">
+  <label>Product
+    <select id="productSelect"></select>
+  </label>
+  <label>Screw detection shot
+    <select id="shotSelect"></select>
+  </label>
+  <label>Label
+    <select id="labelSelect"></select>
+  </label>
+  <button id="btnLoad">Load</button>
+  <span class="sep"></span>
+  <button id="btnZoomOut">-</button>
+  <span id="zoomLabel">100%</span>
+  <button id="btnZoomIn">+</button>
+  <button id="btnZoomReset">Reset view</button>
+  <span class="sep"></span>
+  <button id="btnDeleteBox">Delete selected box</button>
+  <button id="btnSave">Save annotations</button>
+</section>
+
+<section id="productAdmin">
+  <fieldset>
+    <legend>New product</legend>
+    <label>Stage
+      <select id="newStage">
+        <option value="mpfront">mpfront</option>
+        <option value="mpback">mpback</option>
+      </select>
+    </label>
+    <label>Camera
+      <select id="newCamera">
+        <option value="realsense">realsense</option>
+        <option value="omron">omron</option>
+        <option value="Top_Camera">Top_Camera</option>
+      </select>
+    </label>
+    <label>Name
+      <input id="newPrinterId" type="text" placeholder="e.g. XM7-30-B-EV" />
+    </label>
+    <button id="btnCreateProduct">Create product</button>
+    <span id="createResult" class="result"></span>
+  </fieldset>
+  <fieldset>
+    <legend>Upload image for current shot</legend>
+    <input id="uploadFile" type="file" accept="image/*" />
+    <button id="btnUpload">Upload</button>
+    <span id="uploadResult" class="result"></span>
+  </fieldset>
+</section>
+
+<section id="workspace">
+  <canvas id="annoCanvas" width="900" height="600"></canvas>
+  <aside id="sidePanel">
+    <h2>Boxes</h2>
+    <ul id="boxList"></ul>
+    <p class="muted">
+      Drag on empty space to draw a new box for the selected label.<br />
+      Drag a corner to resize, drag inside to move, Delete key removes the
+      selected box.<br />
+      Mouse wheel = zoom (centered on cursor). Shift+drag or middle-drag = pan.
+    </p>
+    <div id="saveResult" class="result"></div>
+    <hr />
+    <h2>Onsite training</h2>
+    <label>Train shot
+      <select id="trainShotSelect">
+        <option value="">All shots (left + right + closer)</option>
+      </select>
+    </label>
+    <label>Train model
+      <select id="trainModelSelect"></select>
+    </label>
+    <label>YOLO version
+      <select id="yoloVariantSelect"></select>
+    </label>
+    <p class="muted">
+      Pick one shot + one model (e.g. left + screw head) to retrain only that
+      model; the shot's other weights are kept. YOLO version "config default"
+      uses the onsite YAML value.<br />
+      Training one shot only needs that shot's image — the other shots'
+      images/annotations/weights are untouched and don't need to exist yet.
+    </p>
+    <label><input type="checkbox" id="runTraining" checked /> run training (uncheck to only rebuild reference tree)</label>
+    <label>
+      <input type="checkbox" id="useOutputFolder" />
+      save output to a different folder (default: &lt;workspace&gt;/output)
+    </label>
+    <input id="outputFolder" type="text" placeholder="/path/to/output" disabled />
+    <button id="btnTrain">Trigger onsite training</button>
+    <pre id="trainResult" class="result"></pre>
+  </aside>
+</section>
+
+<script type="module" src="/static/main.js"></script>
+</body>
+</html>

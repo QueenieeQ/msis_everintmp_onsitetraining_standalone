@@ -1,0 +1,15 @@
+# Studio (web UI)
+fastapi
+uvicorn
+pydantic
+# Annotation / dataset generation
+numpy
+opencv-python
+pyyaml
+loguru
+# Training (only imported when you press "Trigger onsite training")
+torch
+ultralytics>=8.3.0   # newer releases are needed for yolo26* weights
+# Tests
+pytest
+httpx

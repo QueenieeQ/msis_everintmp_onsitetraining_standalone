@@ -1,0 +1,1189 @@
+# _onsite_yaml_template.yaml
+# Auto-written by ensure_yaml() the first time a site is missing its
+# model_onsite_training.yaml. Hot-reloaded every time train_roi_one_shot,
+# train_screw_one_shot, or train_patch_one_shot runs.
+#
+# Each leaf is either a plain scalar/list, or a structured dict
+# {name, access, definition, Min, Max, Default, Best, Step, Current} in
+# the same shape as model_1.yaml so the GUI's OTF parameter editor can
+# read and modify it — only 'Current' (falling back to 'Default') is used
+# at runtime; Min/Max/Best/Step/name/access/definition are for the UI.
+#
+# roi:   train_roi_one_shot   (training.py)       — single ROI bbox, full image
+# screw: train_screw_one_shot (training_screw.py) — all screw holes, full image
+# patch: train_patch_one_shot (training_patch.py) — one model per screw hole,
+#        trained on a fixed patch_size_px crop around that hole's center only
+
+model: Onsite Training
+roi:
+  dataset:
+    n_images:
+      name: Number of Augmented Images
+      access: msislab
+      definition: Total augmented train+val images generated from the reference annotation(s)
+      Min: 50
+      Max: 5000
+      Default: 500
+      Best: 500
+      Step: 50
+      Current: 500
+    val_ratio:
+      name: Validation Split Ratio
+      access: msislab
+      definition: Fraction of n_images held out for validation
+      Min: 0.0
+      Max: 0.5
+      Default: 0.1
+      Best: 0.1
+      Step: 0.01
+      Current: 0.1
+    imgsz:
+      name: Training Image Size (px)
+      access: msislab
+      definition: Square image size fed to the YOLO model during training
+      Min: 320
+      Max: 1280
+      Default: 640
+      Best: 640
+      Step: 32
+      Current: 640
+    seed:
+      name: Random Seed
+      access: msislab
+      definition: Seed for the augmentation RNG (reproducible datasets)
+      Min: 0
+      Max: 999999
+      Default: 123
+      Best: 123
+      Step: 1
+      Current: 123
+  train:
+    epochs:
+      name: Epochs
+      access: msislab
+      definition: Number of training epochs
+      Min: 1
+      Max: 500
+      Default: 60
+      Best: 60
+      Step: 1
+      Current: 60
+    batch:
+      name: Batch Size
+      access: msislab
+      definition: Training batch size
+      Min: 1
+      Max: 128
+      Default: 16
+      Best: 16
+      Step: 1
+      Current: 16
+    device:
+      name: Device
+      access: msislab
+      definition: 'Training device: "0" for GPU0, "cpu" for CPU'
+      Type: str
+      Default: '0'
+      Current: '0'
+    workers:
+      name: Dataloader Workers
+      access: msislab
+      definition: Number of dataloader worker processes
+      Min: 0
+      Max: 32
+      Default: 4
+      Best: 4
+      Step: 1
+      Current: 4
+    patience:
+      name: Early-Stop Patience
+      access: msislab
+      definition: Epochs with no improvement before early stopping
+      Min: 1
+      Max: 100
+      Default: 12
+      Best: 12
+      Step: 1
+      Current: 12
+    project_dir:
+      name: Project Directory
+      access: msislab
+      definition: Ultralytics run output directory (runs/detect/<run_name>)
+      Type: str
+      Default: runs
+      Current: runs
+    delete_runs_dir:
+      name: Delete Runs Dir After Training
+      access: msislab
+      definition: Delete the Ultralytics run directory after copying out best.pt (0/1)
+      Min: 0
+      Max: 1
+      Default: 0
+      Best: 0
+      Step: 1
+      Current: 0
+    amp:
+      name: Enable AMP
+      access: msislab
+      definition: Enable automatic mixed precision during training (0/1)
+      Min: 0
+      Max: 1
+      Default: 0
+      Best: 0
+      Step: 1
+      Current: 0
+    cudnn_enabled:
+      name: Enable cuDNN
+      access: msislab
+      definition: Enable torch.backends.cudnn (0/1); leave 0 on machines with a broken cuDNN 9.x lazy
+        loader
+      Min: 0
+      Max: 1
+      Default: 0
+      Best: 0
+      Step: 1
+      Current: 0
+    model_variant:
+      name: YOLO Model Variant
+      access: msislab
+      definition: "Ultralytics model name/weights to start training from (e.g. yolo11s.pt, yolov8s.pt,\
+        \ yolo26s.pt) \u2014 switch YOLO versions without code changes"
+      Type: str
+      Default: yolo11s.pt
+      Current: yolo11s.pt
+  augment:
+    p_brightness:
+      name: Brightness Aug Probability
+      access: msislab
+      definition: Chance to apply a brightness/bias jitter per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.55
+      Best: 0.55
+      Step: 0.05
+      Current: 0.55
+    p_translate:
+      name: Translate Aug Probability
+      access: msislab
+      definition: Chance to apply a translation per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.55
+      Best: 0.55
+      Step: 0.05
+      Current: 0.55
+    p_noise:
+      name: Noise Aug Probability
+      access: msislab
+      definition: Chance to apply Gaussian noise per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.45
+      Best: 0.45
+      Step: 0.05
+      Current: 0.45
+    p_blur:
+      name: Blur Aug Probability
+      access: msislab
+      definition: Chance to apply blur per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.35
+      Best: 0.35
+      Step: 0.05
+      Current: 0.35
+    p_rotate:
+      name: Rotate Aug Probability
+      access: msislab
+      definition: Chance to apply a rotation per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.45
+      Best: 0.45
+      Step: 0.05
+      Current: 0.45
+    p_shear:
+      name: Shear Aug Probability
+      access: msislab
+      definition: Chance to apply a shear per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.3
+      Best: 0.3
+      Step: 0.05
+      Current: 0.3
+    p_scale:
+      name: Scale Aug Probability
+      access: msislab
+      definition: Chance to apply a scale jitter per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.55
+      Best: 0.55
+      Step: 0.05
+      Current: 0.55
+    brightness:
+      gain_min:
+        name: Brightness Gain Min
+        access: msislab
+        definition: Minimum multiplicative brightness gain
+        Min: 0.0
+        Max: 3.0
+        Default: 0.75
+        Best: 0.75
+        Step: 0.05
+        Current: 0.75
+      gain_max:
+        name: Brightness Gain Max
+        access: msislab
+        definition: Maximum multiplicative brightness gain
+        Min: 0.0
+        Max: 3.0
+        Default: 1.25
+        Best: 1.25
+        Step: 0.05
+        Current: 1.25
+      bias_min:
+        name: Brightness Bias Min
+        access: msislab
+        definition: Minimum additive brightness bias
+        Min: -100
+        Max: 100
+        Default: -18
+        Best: -18
+        Step: 1
+        Current: -18
+      bias_max:
+        name: Brightness Bias Max
+        access: msislab
+        definition: Maximum additive brightness bias
+        Min: -100
+        Max: 100
+        Default: 18
+        Best: 18
+        Step: 1
+        Current: 18
+    translate:
+      frac_x:
+        name: Translate Fraction X
+        access: msislab
+        definition: Max horizontal shift as a fraction of image width
+        Min: 0.0
+        Max: 0.5
+        Default: 0.1
+        Best: 0.1
+        Step: 0.01
+        Current: 0.1
+      frac_y:
+        name: Translate Fraction Y
+        access: msislab
+        definition: Max vertical shift as a fraction of image height
+        Min: 0.0
+        Max: 0.5
+        Default: 0.1
+        Best: 0.1
+        Step: 0.01
+        Current: 0.1
+    rotate:
+      deg_min:
+        name: Rotate Degrees Min
+        access: msislab
+        definition: Minimum rotation angle in degrees
+        Min: -180
+        Max: 180
+        Default: -12
+        Best: -12
+        Step: 1
+        Current: -12
+      deg_max:
+        name: Rotate Degrees Max
+        access: msislab
+        definition: Maximum rotation angle in degrees
+        Min: -180
+        Max: 180
+        Default: 12
+        Best: 12
+        Step: 1
+        Current: 12
+    scale:
+      min:
+        name: Scale Min
+        access: msislab
+        definition: Minimum scale factor
+        Min: 0.1
+        Max: 3.0
+        Default: 0.85
+        Best: 0.85
+        Step: 0.05
+        Current: 0.85
+      max:
+        name: Scale Max
+        access: msislab
+        definition: Maximum scale factor
+        Min: 0.1
+        Max: 3.0
+        Default: 1.2
+        Best: 1.2
+        Step: 0.05
+        Current: 1.2
+    shear:
+      shx_min:
+        name: Shear X Min
+        access: msislab
+        definition: Minimum horizontal shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: -0.08
+        Best: -0.08
+        Step: 0.01
+        Current: -0.08
+      shx_max:
+        name: Shear X Max
+        access: msislab
+        definition: Maximum horizontal shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: 0.08
+        Best: 0.08
+        Step: 0.01
+        Current: 0.08
+      shy_min:
+        name: Shear Y Min
+        access: msislab
+        definition: Minimum vertical shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: -0.05
+        Best: -0.05
+        Step: 0.01
+        Current: -0.05
+      shy_max:
+        name: Shear Y Max
+        access: msislab
+        definition: Maximum vertical shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: 0.05
+        Best: 0.05
+        Step: 0.01
+        Current: 0.05
+    noise:
+      sigma_min:
+        name: Noise Sigma Min
+        access: msislab
+        definition: Minimum Gaussian noise standard deviation
+        Min: 0.0
+        Max: 100.0
+        Default: 3.0
+        Best: 3.0
+        Step: 1.0
+        Current: 3.0
+      sigma_max:
+        name: Noise Sigma Max
+        access: msislab
+        definition: Maximum Gaussian noise standard deviation
+        Min: 0.0
+        Max: 100.0
+        Default: 18.0
+        Best: 18.0
+        Step: 1.0
+        Current: 18.0
+    blur:
+      kernels:
+        name: Blur Kernel Sizes
+        access: msislab
+        definition: Candidate odd kernel sizes for Gaussian/median blur
+        Type: list[int]
+        Default:
+        - 3
+        - 5
+        - 7
+        Current:
+        - 3
+        - 5
+        - 7
+screw:
+  dataset:
+    n_images:
+      name: Number of Augmented Images
+      access: msislab
+      definition: Total augmented train+val images generated from the reference annotation(s)
+      Min: 50
+      Max: 5000
+      Default: 500
+      Best: 500
+      Step: 50
+      Current: 500
+    val_ratio:
+      name: Validation Split Ratio
+      access: msislab
+      definition: Fraction of n_images held out for validation
+      Min: 0.0
+      Max: 0.5
+      Default: 0.1
+      Best: 0.1
+      Step: 0.01
+      Current: 0.1
+    imgsz:
+      name: Training Image Size (px)
+      access: msislab
+      definition: Square image size fed to the YOLO model during training
+      Min: 320
+      Max: 1280
+      Default: 640
+      Best: 640
+      Step: 32
+      Current: 640
+    seed:
+      name: Random Seed
+      access: msislab
+      definition: Seed for the augmentation RNG (reproducible datasets)
+      Min: 0
+      Max: 999999
+      Default: 123
+      Best: 123
+      Step: 1
+      Current: 123
+  train:
+    epochs:
+      name: Epochs
+      access: msislab
+      definition: Number of training epochs
+      Min: 1
+      Max: 500
+      Default: 60
+      Best: 60
+      Step: 1
+      Current: 60
+    batch:
+      name: Batch Size
+      access: msislab
+      definition: Training batch size
+      Min: 1
+      Max: 128
+      Default: 16
+      Best: 16
+      Step: 1
+      Current: 16
+    device:
+      name: Device
+      access: msislab
+      definition: 'Training device: "0" for GPU0, "cpu" for CPU'
+      Type: str
+      Default: '0'
+      Current: '0'
+    workers:
+      name: Dataloader Workers
+      access: msislab
+      definition: Number of dataloader worker processes
+      Min: 0
+      Max: 32
+      Default: 4
+      Best: 4
+      Step: 1
+      Current: 4
+    patience:
+      name: Early-Stop Patience
+      access: msislab
+      definition: Epochs with no improvement before early stopping
+      Min: 1
+      Max: 100
+      Default: 12
+      Best: 12
+      Step: 1
+      Current: 12
+    project_dir:
+      name: Project Directory
+      access: msislab
+      definition: Ultralytics run output directory (runs/detect/<run_name>)
+      Type: str
+      Default: runs
+      Current: runs
+    delete_runs_dir:
+      name: Delete Runs Dir After Training
+      access: msislab
+      definition: Delete the Ultralytics run directory after copying out best.pt (0/1)
+      Min: 0
+      Max: 1
+      Default: 0
+      Best: 0
+      Step: 1
+      Current: 0
+    amp:
+      name: Enable AMP
+      access: msislab
+      definition: Enable automatic mixed precision during training (0/1)
+      Min: 0
+      Max: 1
+      Default: 0
+      Best: 0
+      Step: 1
+      Current: 0
+    cudnn_enabled:
+      name: Enable cuDNN
+      access: msislab
+      definition: Enable torch.backends.cudnn (0/1); leave 0 on machines with a broken cuDNN 9.x lazy
+        loader
+      Min: 0
+      Max: 1
+      Default: 0
+      Best: 0
+      Step: 1
+      Current: 0
+    model_variant:
+      name: YOLO Model Variant
+      access: msislab
+      definition: "Ultralytics model name/weights to start training from (e.g. yolo11s.pt, yolov8s.pt,\
+        \ yolo26s.pt) \u2014 switch YOLO versions without code changes"
+      Type: str
+      Default: yolo11s.pt
+      Current: yolo11s.pt
+  augment:
+    p_brightness:
+      name: Brightness Aug Probability
+      access: msislab
+      definition: Chance to apply a brightness/bias jitter per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.55
+      Best: 0.55
+      Step: 0.05
+      Current: 0.55
+    p_translate:
+      name: Translate Aug Probability
+      access: msislab
+      definition: Chance to apply a translation per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.55
+      Best: 0.55
+      Step: 0.05
+      Current: 0.55
+    p_noise:
+      name: Noise Aug Probability
+      access: msislab
+      definition: Chance to apply Gaussian noise per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.45
+      Best: 0.45
+      Step: 0.05
+      Current: 0.45
+    p_blur:
+      name: Blur Aug Probability
+      access: msislab
+      definition: Chance to apply blur per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.35
+      Best: 0.35
+      Step: 0.05
+      Current: 0.35
+    p_rotate:
+      name: Rotate Aug Probability
+      access: msislab
+      definition: Chance to apply a rotation per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.45
+      Best: 0.45
+      Step: 0.05
+      Current: 0.45
+    p_shear:
+      name: Shear Aug Probability
+      access: msislab
+      definition: Chance to apply a shear per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.3
+      Best: 0.3
+      Step: 0.05
+      Current: 0.3
+    p_scale:
+      name: Scale Aug Probability
+      access: msislab
+      definition: Chance to apply a scale jitter per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.55
+      Best: 0.55
+      Step: 0.05
+      Current: 0.55
+    brightness:
+      gain_min:
+        name: Brightness Gain Min
+        access: msislab
+        definition: Minimum multiplicative brightness gain
+        Min: 0.0
+        Max: 3.0
+        Default: 0.75
+        Best: 0.75
+        Step: 0.05
+        Current: 0.75
+      gain_max:
+        name: Brightness Gain Max
+        access: msislab
+        definition: Maximum multiplicative brightness gain
+        Min: 0.0
+        Max: 3.0
+        Default: 1.25
+        Best: 1.25
+        Step: 0.05
+        Current: 1.25
+      bias_min:
+        name: Brightness Bias Min
+        access: msislab
+        definition: Minimum additive brightness bias
+        Min: -100
+        Max: 100
+        Default: -18
+        Best: -18
+        Step: 1
+        Current: -18
+      bias_max:
+        name: Brightness Bias Max
+        access: msislab
+        definition: Maximum additive brightness bias
+        Min: -100
+        Max: 100
+        Default: 18
+        Best: 18
+        Step: 1
+        Current: 18
+    translate:
+      frac_x:
+        name: Translate Fraction X
+        access: msislab
+        definition: Max horizontal shift as a fraction of image width
+        Min: 0.0
+        Max: 0.5
+        Default: 0.1
+        Best: 0.1
+        Step: 0.01
+        Current: 0.1
+      frac_y:
+        name: Translate Fraction Y
+        access: msislab
+        definition: Max vertical shift as a fraction of image height
+        Min: 0.0
+        Max: 0.5
+        Default: 0.1
+        Best: 0.1
+        Step: 0.01
+        Current: 0.1
+    rotate:
+      deg_min:
+        name: Rotate Degrees Min
+        access: msislab
+        definition: Minimum rotation angle in degrees
+        Min: -180
+        Max: 180
+        Default: -12
+        Best: -12
+        Step: 1
+        Current: -12
+      deg_max:
+        name: Rotate Degrees Max
+        access: msislab
+        definition: Maximum rotation angle in degrees
+        Min: -180
+        Max: 180
+        Default: 12
+        Best: 12
+        Step: 1
+        Current: 12
+    scale:
+      min:
+        name: Scale Min
+        access: msislab
+        definition: Minimum scale factor
+        Min: 0.1
+        Max: 3.0
+        Default: 0.85
+        Best: 0.85
+        Step: 0.05
+        Current: 0.85
+      max:
+        name: Scale Max
+        access: msislab
+        definition: Maximum scale factor
+        Min: 0.1
+        Max: 3.0
+        Default: 1.2
+        Best: 1.2
+        Step: 0.05
+        Current: 1.2
+    shear:
+      shx_min:
+        name: Shear X Min
+        access: msislab
+        definition: Minimum horizontal shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: -0.08
+        Best: -0.08
+        Step: 0.01
+        Current: -0.08
+      shx_max:
+        name: Shear X Max
+        access: msislab
+        definition: Maximum horizontal shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: 0.08
+        Best: 0.08
+        Step: 0.01
+        Current: 0.08
+      shy_min:
+        name: Shear Y Min
+        access: msislab
+        definition: Minimum vertical shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: -0.05
+        Best: -0.05
+        Step: 0.01
+        Current: -0.05
+      shy_max:
+        name: Shear Y Max
+        access: msislab
+        definition: Maximum vertical shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: 0.05
+        Best: 0.05
+        Step: 0.01
+        Current: 0.05
+    noise:
+      sigma_min:
+        name: Noise Sigma Min
+        access: msislab
+        definition: Minimum Gaussian noise standard deviation
+        Min: 0.0
+        Max: 100.0
+        Default: 3.0
+        Best: 3.0
+        Step: 1.0
+        Current: 3.0
+      sigma_max:
+        name: Noise Sigma Max
+        access: msislab
+        definition: Maximum Gaussian noise standard deviation
+        Min: 0.0
+        Max: 100.0
+        Default: 18.0
+        Best: 18.0
+        Step: 1.0
+        Current: 18.0
+    blur:
+      kernels:
+        name: Blur Kernel Sizes
+        access: msislab
+        definition: Candidate odd kernel sizes for Gaussian/median blur
+        Type: list[int]
+        Default:
+        - 3
+        - 5
+        - 7
+        Current:
+        - 3
+        - 5
+        - 7
+patch:
+  dataset:
+    n_images:
+      name: Number of Augmented Images
+      access: msislab
+      definition: Total augmented train+val images generated from the reference annotation(s)
+      Min: 50
+      Max: 5000
+      Default: 500
+      Best: 500
+      Step: 50
+      Current: 500
+    val_ratio:
+      name: Validation Split Ratio
+      access: msislab
+      definition: Fraction of n_images held out for validation
+      Min: 0.0
+      Max: 0.5
+      Default: 0.1
+      Best: 0.1
+      Step: 0.01
+      Current: 0.1
+    imgsz:
+      name: Training Image Size (px)
+      access: msislab
+      definition: Square image size fed to the YOLO model during training
+      Min: 320
+      Max: 1280
+      Default: 640
+      Best: 640
+      Step: 32
+      Current: 640
+    seed:
+      name: Random Seed
+      access: msislab
+      definition: Seed for the augmentation RNG (reproducible datasets)
+      Min: 0
+      Max: 999999
+      Default: 123
+      Best: 123
+      Step: 1
+      Current: 123
+    patch_size_px:
+      name: Patch Size (px)
+      access: msislab
+      definition: Fixed square window size, in original-image pixels, cropped around each screw-hole center
+        for patch-based training (patch_training)
+      Min: 8
+      Max: 200
+      Default: 40
+      Best: 40
+      Step: 2
+      Current: 40
+  train:
+    epochs:
+      name: Epochs
+      access: msislab
+      definition: Number of training epochs
+      Min: 1
+      Max: 500
+      Default: 60
+      Best: 60
+      Step: 1
+      Current: 60
+    batch:
+      name: Batch Size
+      access: msislab
+      definition: Training batch size
+      Min: 1
+      Max: 128
+      Default: 16
+      Best: 16
+      Step: 1
+      Current: 16
+    device:
+      name: Device
+      access: msislab
+      definition: 'Training device: "0" for GPU0, "cpu" for CPU'
+      Type: str
+      Default: '0'
+      Current: '0'
+    workers:
+      name: Dataloader Workers
+      access: msislab
+      definition: Number of dataloader worker processes
+      Min: 0
+      Max: 32
+      Default: 4
+      Best: 4
+      Step: 1
+      Current: 4
+    patience:
+      name: Early-Stop Patience
+      access: msislab
+      definition: Epochs with no improvement before early stopping
+      Min: 1
+      Max: 100
+      Default: 12
+      Best: 12
+      Step: 1
+      Current: 12
+    project_dir:
+      name: Project Directory
+      access: msislab
+      definition: Ultralytics run output directory (runs/detect/<run_name>)
+      Type: str
+      Default: runs
+      Current: runs
+    delete_runs_dir:
+      name: Delete Runs Dir After Training
+      access: msislab
+      definition: Delete the Ultralytics run directory after copying out best.pt (0/1)
+      Min: 0
+      Max: 1
+      Default: 0
+      Best: 0
+      Step: 1
+      Current: 0
+    amp:
+      name: Enable AMP
+      access: msislab
+      definition: Enable automatic mixed precision during training (0/1)
+      Min: 0
+      Max: 1
+      Default: 0
+      Best: 0
+      Step: 1
+      Current: 0
+    cudnn_enabled:
+      name: Enable cuDNN
+      access: msislab
+      definition: Enable torch.backends.cudnn (0/1); leave 0 on machines with a broken cuDNN 9.x lazy
+        loader
+      Min: 0
+      Max: 1
+      Default: 0
+      Best: 0
+      Step: 1
+      Current: 0
+    model_variant:
+      name: YOLO Model Variant
+      access: msislab
+      definition: "Ultralytics model name/weights to start training from (e.g. yolo11s.pt, yolov8s.pt,\
+        \ yolo26s.pt) \u2014 switch YOLO versions without code changes"
+      Type: str
+      Default: yolo11s.pt
+      Current: yolo11s.pt
+  augment:
+    p_brightness:
+      name: Brightness Aug Probability
+      access: msislab
+      definition: Chance to apply a brightness/bias jitter per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.55
+      Best: 0.55
+      Step: 0.05
+      Current: 0.55
+    p_translate:
+      name: Translate Aug Probability
+      access: msislab
+      definition: Chance to apply a translation per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.55
+      Best: 0.55
+      Step: 0.05
+      Current: 0.55
+    p_noise:
+      name: Noise Aug Probability
+      access: msislab
+      definition: Chance to apply Gaussian noise per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.45
+      Best: 0.45
+      Step: 0.05
+      Current: 0.45
+    p_blur:
+      name: Blur Aug Probability
+      access: msislab
+      definition: Chance to apply blur per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.35
+      Best: 0.35
+      Step: 0.05
+      Current: 0.35
+    p_rotate:
+      name: Rotate Aug Probability
+      access: msislab
+      definition: Chance to apply a rotation per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.45
+      Best: 0.45
+      Step: 0.05
+      Current: 0.45
+    p_shear:
+      name: Shear Aug Probability
+      access: msislab
+      definition: Chance to apply a shear per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.3
+      Best: 0.3
+      Step: 0.05
+      Current: 0.3
+    p_scale:
+      name: Scale Aug Probability
+      access: msislab
+      definition: Chance to apply a scale jitter per sample
+      Min: 0.0
+      Max: 1.0
+      Default: 0.55
+      Best: 0.55
+      Step: 0.05
+      Current: 0.55
+    brightness:
+      gain_min:
+        name: Brightness Gain Min
+        access: msislab
+        definition: Minimum multiplicative brightness gain
+        Min: 0.0
+        Max: 3.0
+        Default: 0.75
+        Best: 0.75
+        Step: 0.05
+        Current: 0.75
+      gain_max:
+        name: Brightness Gain Max
+        access: msislab
+        definition: Maximum multiplicative brightness gain
+        Min: 0.0
+        Max: 3.0
+        Default: 1.25
+        Best: 1.25
+        Step: 0.05
+        Current: 1.25
+      bias_min:
+        name: Brightness Bias Min
+        access: msislab
+        definition: Minimum additive brightness bias
+        Min: -100
+        Max: 100
+        Default: -18
+        Best: -18
+        Step: 1
+        Current: -18
+      bias_max:
+        name: Brightness Bias Max
+        access: msislab
+        definition: Maximum additive brightness bias
+        Min: -100
+        Max: 100
+        Default: 18
+        Best: 18
+        Step: 1
+        Current: 18
+    translate:
+      frac_x:
+        name: Translate Fraction X
+        access: msislab
+        definition: Max horizontal shift as a fraction of image width
+        Min: 0.0
+        Max: 0.5
+        Default: 0.1
+        Best: 0.1
+        Step: 0.01
+        Current: 0.1
+      frac_y:
+        name: Translate Fraction Y
+        access: msislab
+        definition: Max vertical shift as a fraction of image height
+        Min: 0.0
+        Max: 0.5
+        Default: 0.1
+        Best: 0.1
+        Step: 0.01
+        Current: 0.1
+    rotate:
+      deg_min:
+        name: Rotate Degrees Min
+        access: msislab
+        definition: Minimum rotation angle in degrees
+        Min: -180
+        Max: 180
+        Default: -12
+        Best: -12
+        Step: 1
+        Current: -12
+      deg_max:
+        name: Rotate Degrees Max
+        access: msislab
+        definition: Maximum rotation angle in degrees
+        Min: -180
+        Max: 180
+        Default: 12
+        Best: 12
+        Step: 1
+        Current: 12
+    scale:
+      min:
+        name: Scale Min
+        access: msislab
+        definition: Minimum scale factor
+        Min: 0.1
+        Max: 3.0
+        Default: 0.85
+        Best: 0.85
+        Step: 0.05
+        Current: 0.85
+      max:
+        name: Scale Max
+        access: msislab
+        definition: Maximum scale factor
+        Min: 0.1
+        Max: 3.0
+        Default: 1.2
+        Best: 1.2
+        Step: 0.05
+        Current: 1.2
+    shear:
+      shx_min:
+        name: Shear X Min
+        access: msislab
+        definition: Minimum horizontal shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: -0.08
+        Best: -0.08
+        Step: 0.01
+        Current: -0.08
+      shx_max:
+        name: Shear X Max
+        access: msislab
+        definition: Maximum horizontal shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: 0.08
+        Best: 0.08
+        Step: 0.01
+        Current: 0.08
+      shy_min:
+        name: Shear Y Min
+        access: msislab
+        definition: Minimum vertical shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: -0.05
+        Best: -0.05
+        Step: 0.01
+        Current: -0.05
+      shy_max:
+        name: Shear Y Max
+        access: msislab
+        definition: Maximum vertical shear factor
+        Min: -1.0
+        Max: 1.0
+        Default: 0.05
+        Best: 0.05
+        Step: 0.01
+        Current: 0.05
+    noise:
+      sigma_min:
+        name: Noise Sigma Min
+        access: msislab
+        definition: Minimum Gaussian noise standard deviation
+        Min: 0.0
+        Max: 100.0
+        Default: 3.0
+        Best: 3.0
+        Step: 1.0
+        Current: 3.0
+      sigma_max:
+        name: Noise Sigma Max
+        access: msislab
+        definition: Maximum Gaussian noise standard deviation
+        Min: 0.0
+        Max: 100.0
+        Default: 18.0
+        Best: 18.0
+        Step: 1.0
+        Current: 18.0
+    blur:
+      kernels:
+        name: Blur Kernel Sizes
+        access: msislab
+        definition: Candidate odd kernel sizes for Gaussian/median blur
+        Type: list[int]
+        Default:
+        - 3
+        - 5
+        - 7
+        Current:
+        - 3
+        - 5
+        - 7
